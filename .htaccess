@@ -1,0 +1,15 @@
+Options -Indexes
+RewriteEngine On
+
+# Rewrite /collection/{slug} -> collection.php?slug={slug}
+# Keep it local to the current folder to avoid host/base-path mismatches.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^collection/([a-zA-Z0-9]+)\/?$ collection.php?slug=$1 [L,QSA]
+
+# Disable caching for collection.php (debug + avoid OPcache/stale content effects)
+<Files "collection.php">
+  Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+  Header set Pragma "no-cache"
+  Header set Expires "0"
+</Files>
